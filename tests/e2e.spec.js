@@ -46,7 +46,7 @@ test('E2E покупка товара', async ({ page }) => {
   // 9. Завершение покупки
   await checkoutStepTwo.finishCheckout();
 
-  // 10. Проверка успешного заказ
+  // 10. Проверка успешного заказа
   const message = await checkoutComplete.getCompletionMessage();
   await expect(message).toContain('Thank you for your order!');
 });
