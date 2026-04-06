@@ -1,55 +1,49 @@
 name: Manual Test Run
 
 on:
-  workflow_dispatch:  # Позволяет запускать вручную из интерфейса GitHub
+  workflow_dispatch:
 
 jobs:
   run-tests:
     runs-on: ubuntu-latest
 
     steps:
-      # Шаг 1: Клонирование репозитория
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Шаг 2: Установка Node.js
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
 
-      # Шаг 3: Установка зависимостей
       - name: Install dependencies
-        run: npm ci  # лучше npm install, но ci быстрее и надёжнее
+        run: npm ci
 
-      # Шаг 4: Установка браузеров Playwright
-      - name: Install Playwright browsers
-        run: npx playwright install --with-deps chromium
+      - name: Install Playwright browsers (only Chromium)
+        run: |
+          npx playwright install chromium
+          npx playwright install-deps chromium
 
-      # Шаг 5: Запуск UI тестов
       - name: Run UI tests
-        run: npm run tests:ui -- --reporter=html
-        continue-on-error: true  # Продолжить, даже если UI тесты упали
+        run: npm run tests:ui -- --reporter=html --project=chromium
+        continue-on-error: true
         env:
           PLAYWRIGHT_HTML_REPORT: playwright-report-ui
 
-      # Шаг 6: Запуск API тестов
       - name: Run API tests
         run: npm run tests:api -- --reporter=html
-        continue-on-error: true  # Продолжить, даже если API тесты упали
+        continue-on-error: true
         env:
           PLAYWRIGHT_HTML_REPORT: playwright-report-api
 
-      # Шаг 7: Загрузка отчётов UI
       - name: Upload UI test report
-        if: always()  # Загружаем даже при ошибке
+        if: always()
         uses: actions/upload-artifact@v4
         with:
           name: playwright-report-ui
           path: playwright-report-ui/
           retention-days: 7
 
-      # Шаг 8: Загрузка отчётов API
       - name: Upload API test report
         if: always()
         uses: actions/upload-artifact@v4
