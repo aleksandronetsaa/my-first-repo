@@ -9,7 +9,7 @@ test.describe.serial('API-тесты для Restful-booker', () => {
     let bookingHelper;
     let authHelper;
 
-    test('1. Создание бронирования (Create - POST)', async ({ request }) => {
+    test('1. Создание бронирования (Create - POST) @api', async ({ request }) => {
         bookingHelper = new BookingHelper(request);
 
         const result = await bookingHelper.createBooking(TestData.validBooking);
@@ -23,7 +23,7 @@ test.describe.serial('API-тесты для Restful-booker', () => {
         console.log(`✅ Создано бронирование с ID: ${bookingId}`);
     });
 
-    test('2. Получение информации о бронировании (Read - GET)', async ({ request }) => {
+    test('2. Получение информации о бронировании (Read - GET) @api', async ({ request }) => {
         expect(bookingId).not.toBeNull();
 
         bookingHelper = new BookingHelper(request);
@@ -40,7 +40,7 @@ test.describe.serial('API-тесты для Restful-booker', () => {
         console.log(`✅ Получено бронирование ID ${bookingId}`);
     });
 
-    test('3. Обновление бронирования (Update - PUT)', async ({ request }) => {
+    test('3. Обновление бронирования (Update - PUT) @api', async ({ request }) => {
         expect(bookingId).not.toBeNull();
 
         authHelper = new AuthHelper(request);
@@ -61,7 +61,7 @@ test.describe.serial('API-тесты для Restful-booker', () => {
         console.log(`✅ Обновлено бронирование ID ${bookingId}`);
     });
 
-    test('4. Удаление бронирования (Delete - DELETE)', async ({ request }) => {
+    test('4. Удаление бронирования (Delete - DELETE) @api', async ({ request }) => {
         expect(bookingId).not.toBeNull();
 
         if (!authHelper) {
